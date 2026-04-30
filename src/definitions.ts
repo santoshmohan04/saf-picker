@@ -1,3 +1,13 @@
+/**
+ * Error codes returned when SAF operations fail.
+ *
+ * - CANCELLED: The user dismissed the picker flow.
+ * - INVALID_URI: The provided or returned URI is invalid.
+ * - NO_PERMISSION: The app lacks permissions for the requested URI.
+ * - UNSUPPORTED: The platform does not support SAF (non-Android).
+ * - INVALID_OPTIONS: The provided options are invalid or incomplete.
+ * - UNKNOWN: An unexpected error occurred.
+ */
 export type SafPickerErrorCode =
   | 'CANCELLED'
   | 'INVALID_URI'

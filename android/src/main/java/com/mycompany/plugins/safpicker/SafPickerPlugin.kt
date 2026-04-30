@@ -27,8 +27,8 @@ class SafPickerPlugin : Plugin() {
     }
 
     private companion object {
-        const val DEFAULT_DIRECTORY_NAME = "Storage"
-        const val EMPTY_FILE_NAME = ""
+        const val FALLBACK_DIRECTORY_NAME = "Storage"
+        const val FALLBACK_FILE_NAME = "Unnamed"
     }
 
     private var pendingPermissionFlags: Int =
@@ -103,7 +103,8 @@ class SafPickerPlugin : Plugin() {
 
         val ret = JSObject()
         ret.put("uri", uri.toString())
-        ret.put("name", doc.name ?: DEFAULT_DIRECTORY_NAME)
+        val directoryName = doc.name ?: doc.uri.lastPathSegment ?: FALLBACK_DIRECTORY_NAME
+        ret.put("name", directoryName)
         putIfNotNull(ret, "mimeType", doc.type)
         putIfNotNull(ret, "lastModified", doc.lastModified())
         ret.put("canRead", doc.canRead())
@@ -172,7 +173,8 @@ class SafPickerPlugin : Plugin() {
         page.items.forEach { listing ->
             val file = listing.payload
             val obj = JSObject()
-            obj.put("name", listing.name ?: EMPTY_FILE_NAME)
+            val fileName = listing.name ?: file.uri.lastPathSegment ?: FALLBACK_FILE_NAME
+            obj.put("name", fileName)
             obj.put("uri", file.uri.toString())
             obj.put("isFolder", listing.isDirectory)
             if (file.isFile) {

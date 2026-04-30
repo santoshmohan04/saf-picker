@@ -48,7 +48,9 @@ object SafPickerListingProcessor {
             SafPickerFilter.FOLDERS -> items.filter { it.isDirectory }
         }
 
-        val nameSelector: (SafPickerListing<T>) -> String = { it.name?.lowercase(Locale.US) ?: "" }
+        val nameSelector: (SafPickerListing<T>) -> String = {
+            it.name?.lowercase(Locale.getDefault()) ?: ""
+        }
 
         val comparator = when (sortBy) {
             SafPickerSortBy.NAME -> compareBy(nameSelector)
