@@ -188,6 +188,8 @@ const formatBytes = (value?: number) => {
   return `${size.toFixed(1)} ${units[index]}`;
 };
 
+const formatItemCount = (count: number) => `${count} item${count === 1 ? '' : 's'}`;
+
 const updateDirectory = () => {
   if (directoryNameEl) {
     directoryNameEl.textContent = directory?.name ?? 'None';
@@ -204,7 +206,7 @@ const updateFiles = () => {
   }
 
   fileListEl.innerHTML = '';
-  fileCountEl.textContent = `${files.length} item${files.length === 1 ? '' : 's'}`;
+  fileCountEl.textContent = formatItemCount(files.length);
 
   if (!files.length) {
     emptyEl.classList.add('is-visible');
@@ -286,7 +288,7 @@ const onListFiles = async () => {
     const response = await SafPicker.listFiles({ uri: directory.uri });
     files = response.files;
     updateFiles();
-    setStatus(`Loaded ${files.length} item${files.length === 1 ? '' : 's'}.`, 'success');
+    setStatus(`Loaded ${formatItemCount(files.length)}.`, 'success');
   } catch (error) {
     setStatus('Failed to load files from SAF.', 'error');
     console.error(error);
