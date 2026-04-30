@@ -48,13 +48,14 @@ object SafPickerListingProcessor {
             SafPickerFilter.FOLDERS -> items.filter { it.isDirectory }
         }
 
+        val nameKey: (SafPickerListing<T>) -> String = { it.name?.lowercase(Locale.US) ?: "" }
+
         val comparator = when (sortBy) {
-            SafPickerSortBy.NAME -> compareBy<SafPickerListing<T>> { it.name?.lowercase(Locale.US) ?: "" }
-                .thenBy { it.name ?: "" }
+            SafPickerSortBy.NAME -> compareBy(nameKey)
             SafPickerSortBy.SIZE -> compareBy<SafPickerListing<T>> { it.size }
-                .thenBy { it.name?.lowercase(Locale.US) ?: "" }
+                .thenBy(nameKey)
             SafPickerSortBy.LAST_MODIFIED -> compareBy<SafPickerListing<T>> { it.lastModified }
-                .thenBy { it.name?.lowercase(Locale.US) ?: "" }
+                .thenBy(nameKey)
         }
 
         val sorted = if (sortOrder == SafPickerSortOrder.DESC) {
