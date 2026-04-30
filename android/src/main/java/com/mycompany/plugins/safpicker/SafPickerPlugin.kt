@@ -28,7 +28,7 @@ class SafPickerPlugin : Plugin() {
 
     private companion object {
         const val DEFAULT_DIRECTORY_NAME = "Storage"
-        const val DEFAULT_FILE_NAME = ""
+        const val EMPTY_FILE_NAME = ""
     }
 
     private var pendingPermissionFlags: Int =
@@ -172,7 +172,7 @@ class SafPickerPlugin : Plugin() {
         page.items.forEach { listing ->
             val file = listing.payload
             val obj = JSObject()
-            obj.put("name", listing.name ?: DEFAULT_FILE_NAME)
+            obj.put("name", listing.name ?: EMPTY_FILE_NAME)
             obj.put("uri", file.uri.toString())
             obj.put("isFolder", listing.isDirectory)
             if (file.isFile) {
