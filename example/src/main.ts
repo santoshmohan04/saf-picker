@@ -12,8 +12,16 @@ if (!app) {
   throw new Error('App root element not found.');
 }
 
+const platform = Capacitor.getPlatform();
 const isNative = Capacitor.isNativePlatform();
-const platformLabel = Capacitor.getPlatform().toUpperCase();
+const isAndroid = platform === 'android';
+const isSupported = isNative && isAndroid;
+const platformLabel = platform.toUpperCase();
+const runtimeLabel = isSupported
+  ? 'Android runtime'
+  : isNative
+    ? 'Native (unsupported)'
+    : 'Web preview';
 
 app.innerHTML = `
   <div class="app-shell">
@@ -26,7 +34,7 @@ app.innerHTML = `
         </p>
         <div class="meta">
           <span class="chip">${platformLabel}</span>
-          <span class="chip">${isNative ? 'Native runtime' : 'Web preview'}</span>
+          <span class="chip">${runtimeLabel}</span>
         </div>
       </div>
       <div class="hero-card">
@@ -73,7 +81,7 @@ app.innerHTML = `
           <article class="card">
             <h3>Native readiness</h3>
             <p>
-              ${isNative ? 'Native runtime detected. Picker buttons are enabled.' : 'Run on Android to enable the picker.'}
+              ${isSupported ? 'Android runtime detected. Picker buttons are enabled.' : 'Run on Android to enable the picker.'}
             </p>
           </article>
         </div>
@@ -239,7 +247,7 @@ const updateFiles = () => {
 };
 
 const updateButtons = () => {
-  const disabled = !isNative || isBusy;
+  const disabled = !isSupported || isBusy;
   if (pickButton) {
     pickButton.disabled = disabled;
   }
@@ -255,7 +263,7 @@ const setBusy = (busy: boolean) => {
 };
 
 const onPickDirectory = async () => {
-  if (!isNative) {
+  if (!isSupported) {
     setStatus('Run this demo on Android to access SAF.', 'warning');
     return;
   }
@@ -329,6 +337,9 @@ updateFiles();
 initTabs();
 updateButtons();
 
-if (!isNative) {
-  setStatus('Web preview only. Run on Android for SAF features.', 'warning');
+if (!isSupported) {
+  const message = isNative
+    ? 'Android-only plugin. Run on Android for SAF features.'
+    : 'Web preview only. Run on Android for SAF features.';
+  setStatus(message, 'warning');
 }
