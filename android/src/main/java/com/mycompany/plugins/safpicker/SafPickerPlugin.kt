@@ -26,6 +26,11 @@ class SafPickerPlugin : Plugin() {
         const val UNKNOWN = "UNKNOWN"
     }
 
+    private companion object {
+        const val DEFAULT_DIRECTORY_NAME = "Storage"
+        const val DEFAULT_FILE_NAME = ""
+    }
+
     private var pendingPermissionFlags: Int =
         Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
 
@@ -98,7 +103,7 @@ class SafPickerPlugin : Plugin() {
 
         val ret = JSObject()
         ret.put("uri", uri.toString())
-        ret.put("name", doc.name ?: "Storage")
+        ret.put("name", doc.name ?: DEFAULT_DIRECTORY_NAME)
         putIfNotNull(ret, "mimeType", doc.type)
         putIfNotNull(ret, "lastModified", doc.lastModified())
         ret.put("canRead", doc.canRead())
@@ -167,7 +172,7 @@ class SafPickerPlugin : Plugin() {
         page.items.forEach { listing ->
             val file = listing.payload
             val obj = JSObject()
-            obj.put("name", listing.name ?: "")
+            obj.put("name", listing.name ?: DEFAULT_FILE_NAME)
             obj.put("uri", file.uri.toString())
             obj.put("isFolder", listing.isDirectory)
             if (file.isFile) {
