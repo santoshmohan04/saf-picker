@@ -7,22 +7,22 @@ let package = Package(
     products: [
         .library(
             name: "SafPicker",
-            targets: ["SafPickerPluginPlugin"])
+            targets: ["SafPickerPlugin"])
     ],
     dependencies: [
         .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "8.0.0")
     ],
     targets: [
         .target(
-            name: "SafPickerPluginPlugin",
+            name: "SafPickerPlugin",
             dependencies: [
                 .product(name: "Capacitor", package: "capacitor-swift-pm"),
                 .product(name: "Cordova", package: "capacitor-swift-pm")
             ],
-            path: "ios/Sources/SafPickerPluginPlugin"),
+            path: "ios/Sources/SafPickerPlugin"),
         .testTarget(
-            name: "SafPickerPluginPluginTests",
-            dependencies: ["SafPickerPluginPlugin"],
-            path: "ios/Tests/SafPickerPluginPluginTests")
+            name: "SafPickerPluginTests",
+            dependencies: ["SafPickerPlugin"],
+            path: "ios/Tests/SafPickerPluginTests")
     ]
 )
