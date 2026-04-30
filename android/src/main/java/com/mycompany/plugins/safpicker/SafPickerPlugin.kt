@@ -350,10 +350,12 @@ class SafPickerPlugin : Plugin() {
     }
 
     private fun parseSortBy(value: String?): SafPickerSortBy? {
-        return when (value?.lowercase()) {
-            null, "name" -> SafPickerSortBy.NAME
-            "size" -> SafPickerSortBy.SIZE
-            "lastmodified", "last_modified", "last-modified" -> SafPickerSortBy.LAST_MODIFIED
+        return when {
+            value.isNullOrBlank() || value.equals("name", ignoreCase = true) -> SafPickerSortBy.NAME
+            value.equals("size", ignoreCase = true) -> SafPickerSortBy.SIZE
+            value.equals("lastModified", ignoreCase = true) ||
+                value.equals("last_modified", ignoreCase = true) ||
+                value.equals("last-modified", ignoreCase = true) -> SafPickerSortBy.LAST_MODIFIED
             else -> null
         }
     }
